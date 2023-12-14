@@ -24,7 +24,9 @@ export async function getEksData(region) {
             if (instance.PublicIpAddress) {
               ec2Data.push({
                 instanceId: instance.InstanceId,
-                publicIp: instance.PublicIpAddress,
+                publicIp: instance.PublicIpAddress || 'None',
+                privateIp: instance.PrivateIpAddress,
+                isPublic: !!instance.PublicIpAddress,
               });
             }
           });
@@ -106,8 +108,12 @@ export async function getEksData(region) {
           // Add data to the eksData array, including cluster and node group information
           eksData = eksData.concat(
             ec2Data.map((item) => ({
-              ip: item.publicIp,
-              resourceName: `${clusterName}/${nodeGroup}/${item.instanceId}`,
+              clusterName,
+              nodeGroup,
+              instanceId: item.instanceId,
+              publicIp: item.publicIp,
+              privateIp: item.privateIp,
+              isPublic: item.isPublic,
             }))
           );
         }

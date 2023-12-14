@@ -21,9 +21,11 @@ export async function getEc2Data(region) {
             const instanceName = nameTag ? nameTag.Value : 'Unnamed Instance';
 
             ec2Data.push({
-              name: instanceName, // Adding the instance name
-              ip: instance.PublicIpAddress,
-              resourceName: instance.InstanceId,
+              name: instanceName,
+              InstanceId: instance.InstanceId,
+              publicIp: instance.PublicIpAddress || 'None',
+              privateIp: instance.PrivateIpAddress,
+              isPublic: !!instance.PublicIpAddress,
             });
           }
         });
