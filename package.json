@@ -1,0 +1,16 @@
+{
+  "name": "aws-ip-report",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AWS IP Report Generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --no-warnings index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1040.0",
+    "md-to-pdf": "^5.2.4"
+  }
+}
