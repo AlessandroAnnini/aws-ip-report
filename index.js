@@ -50,15 +50,11 @@ async function generateReport() {
   try {
     console.log('API Gateway');
     const apiGatewayData = await getApiGatewayData(awsRegion);
-    appendToReport('API Gateway', apiGatewayData);
+    appendToReport('API Gateway (all public)', apiGatewayData);
 
     console.log('EC2');
     const ec2Data = await getEc2Data(awsRegion);
     appendToReport('EC2', ec2Data);
-
-    console.log('Elastic IPs');
-    const elasticIpsData = await getElasticIpData(awsRegion);
-    appendToReport('Elastic IPs', elasticIpsData);
 
     console.log('EKS');
     const eksData = await getEksData(awsRegion);
@@ -68,11 +64,15 @@ async function generateReport() {
     const elasticBeanstalkData = await getElasticBeanstalkData(awsRegion);
     appendToReport('Elastic Beanstalk', elasticBeanstalkData);
 
-    console.log('Load Balancers');
+    console.log('Elastic IPs');
+    const elasticIpsData = await getElasticIpData(awsRegion);
+    appendToReport('Elastic IPs (all public)', elasticIpsData);
+
+    console.log('Load Balancers (internetFacing == isPublic)');
     const loadBalancerData = await getLoadBalancerData(awsRegion);
     appendToReport('Load Balancers', loadBalancerData);
 
-    console.log('NAT Gateways');
+    console.log('NAT Gateways (all public)');
     const natGatewayData = await getNatGatewayData(awsRegion);
     appendToReport('NAT Gateways', natGatewayData);
 
