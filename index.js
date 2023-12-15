@@ -3,18 +3,33 @@ import { mdToPdf } from 'md-to-pdf';
 import {
   getApiGatewayData,
   getEc2Data,
-  getElasticIpData,
   getEksData,
   getElasticBeanstalkData,
+  getElasticIpData,
   getLoadBalancerData,
   getNatGatewayData,
   getRdsData,
+  getSubnetData,
+  getVpcData,
 } from './services/index.js';
 
 const awsRegion = 'eu-central-1';
 
-let report =
-  '# AWS IPv4\n\nThe application lists resources and their public IPs (if applicable). It does not determine active usage of IPs.\n\n';
+let report = `# AWS IPv4
+
+The application lists resources and their public IPs (if applicable). It does not determine active usage of IPs.
+
+- [AWS IPv4](#aws-ipv4)
+  - [API Gateway (all public)](#api-gateway-all-public)
+  - [EC2](#ec2)
+  - [EKS](#eks)
+  - [Elastic Beanstalk](#elastic-beanstalk)
+  - [Elastic IPs (all public)](#elastic-ips-all-public)
+  - [Load Balancers](#load-balancers)
+  - [NAT Gateways](#nat-gateways)
+  - [RDS](#rds)
+  - [Subnets](#subnets)
+  - [VPC](#vpc)\n\n`;
 
 function jsonToMarkdownTable(json) {
   // Check if json is an array and is not empty
@@ -39,7 +54,6 @@ function jsonToMarkdownTable(json) {
   return table;
 }
 
-// Append data to the report
 function appendToReport(sectionTitle, data) {
   report += `## ${sectionTitle}\n`;
   report += jsonToMarkdownTable(data);
@@ -79,6 +93,14 @@ async function generateReport() {
     console.log('RDS');
     const rdsData = await getRdsData(awsRegion);
     appendToReport('RDS', rdsData);
+
+    console.log('Subnets');
+    const subnetData = await getSubnetData(awsRegion);
+    appendToReport('Subnets', subnetData);
+
+    console.log('VPC');
+    const vpcData = await getVpcData(awsRegion);
+    appendToReport('VPC', vpcData);
 
     // create output directory if it doesn't exist
     if (!fs.existsSync('./output')) {

@@ -14,6 +14,8 @@ It covers
 - Load Balancers (ALB, NLB, CLB)
 - NAT Gateway instances
 - RDS instances
+- Subnets
+- VPCs
 
 ## Setup
 

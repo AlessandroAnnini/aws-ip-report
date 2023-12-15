@@ -6,3 +6,5 @@ export * from './elasticBeanstalk.js';
 export * from './loadBalancer.js';
 export * from './natGateway.js';
 export * from './rds.js';
+export * from './subnet.js';
+export * from './vpc.js';
