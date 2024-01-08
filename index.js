@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { mdToPdf } from 'md-to-pdf';
+import xl from 'excel4node';
 import {
   getApiGatewayData,
   getEc2Data,
@@ -60,6 +61,35 @@ function appendToReport(sectionTitle, data) {
   report += '\n';
 }
 
+async function generateExcelReport(dataMap) {
+  const wb = new xl.Workbook();
+  const options = {
+    sheetFormat: {
+      defaultColWidth: 30,
+    },
+  };
+
+  for (const [serviceName, data] of Object.entries(dataMap)) {
+    const ws = wb.addWorksheet(serviceName, options);
+    if (!data.length) continue;
+
+    // Headers
+    const headers = Object.keys(data[0]);
+    headers.forEach((header, index) => {
+      ws.cell(1, index + 1).string(header);
+    });
+
+    // Data Rows
+    data.forEach((item, rowIdx) => {
+      Object.values(item).forEach((value, colIdx) => {
+        ws.cell(rowIdx + 2, colIdx + 1).string(value.toString());
+      });
+    });
+  }
+
+  wb.write('./output/aws-ip-report.xlsx');
+}
+
 async function generateReport() {
   try {
     console.log('API Gateway');
@@ -116,6 +146,23 @@ async function generateReport() {
       pdf_options: { landscape: true, format: 'A4' },
     };
     await mdToPdf({ content: report }, pdfOptions);
+
+    // Create Excel Report
+    console.log('Writing report to Excel file...');
+    const dataMap = {
+      'API Gateway (all public)': apiGatewayData,
+      EC2: ec2Data,
+      EKS: eksData,
+      'Elastic Beanstalk': elasticBeanstalkData,
+      'Elastic IPs (all public)': elasticIpsData,
+      'Load Balancers': loadBalancerData,
+      'NAT Gateways': natGatewayData,
+      RDS: rdsData,
+      Subnets: subnetData,
+      VPC: vpcData,
+    };
+    await generateExcelReport(dataMap);
+
     console.log('Report generated successfully!');
   } catch (error) {
     console.error('Error generating report:', error);

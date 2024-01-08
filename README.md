@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Node.js application generates a report of AWS resources and their associated public IPv4 addresses executing dns lookups to determine the public IP addresses when necessary. The report is generated as a markdown file and a pdf file in the `output` directory. The report is organized by resource type.
+This Node.js application generates a report of AWS resources and their associated public IPv4 addresses executing dns lookups to determine the public IP addresses when necessary. The report is generated as a markdown, a pdf and an Excel file in the `output` directory. The report is organized by resource type.
 
 It covers
 
@@ -51,3 +51,91 @@ It covers
 ## Note
 
 The application lists resources and their public IPs (if applicable). It does not determine active usage of IPs.
+
+# AWS Networking Report
+
+## Overview
+
+This report provides an overview of the current AWS networking configuration, including details about various services and resources.
+
+---
+
+## API Gateway Instances
+
+List and describe the API Gateway instances, including their types (REST, HTTP, WebSocket), endpoints, and any associated API stages or resources.
+
+---
+
+## EC2 Instances
+
+### Public EC2 Instances
+
+(List of public EC2 instances with details like Instance ID, IP Address, and attached security groups)
+
+### Private EC2 Instances
+
+(List of private EC2 instances with details)
+
+---
+
+## EKS Clusters
+
+Provide details on each EKS cluster, including cluster names, associated node groups, and any relevant networking configurations like VPC and subnet associations.
+
+---
+
+## Elastic Beanstalk Environments
+
+List the Elastic Beanstalk environments, including environment details, associated applications, and environment health status.
+
+---
+
+## Elastic IPs
+
+Enumerate allocated Elastic IPs, their associated resources (if any), and status (whether they are attached or detached).
+
+---
+
+## Load Balancers
+
+### Application Load Balancers (ALB)
+
+(List of ALBs with details)
+
+### Network Load Balancers (NLB)
+
+(List of NLBs with details)
+
+### Classic Load Balancers (CLB)
+
+(List of CLBs with details)
+
+---
+
+## NAT Gateway Instances
+
+Detail each NAT Gateway, including associated VPC, subnet, and the Elastic IPs allocated to them.
+
+---
+
+## RDS Instances
+
+List the RDS instances, including details on instance type, DB engine, and whether they are publicly accessible.
+
+---
+
+## Subnets
+
+Provide a summary of subnets within each VPC, including details like CIDR blocks, associated route tables, and whether they are public or private.
+
+---
+
+## VPCs
+
+List all VPCs along with their CIDR blocks, attached Internet Gateways or NAT Gateways, and any notable configurations.
+
+---
+
+## Summary
+
+Conclude the report with a high-level summary, highlighting any potential concerns or areas for improvement in the current network setup.
