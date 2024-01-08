@@ -14,20 +14,22 @@ export async function getEc2Data(region) {
       let ec2Data = [];
       data.Reservations.forEach((reservation) => {
         reservation.Instances.forEach((instance) => {
-          // Check if the instance has a public IP address
-          if (instance.PublicIpAddress) {
-            // Find the name tag
-            const nameTag = instance.Tags.find((tag) => tag.Key === 'Name');
-            const instanceName = nameTag ? nameTag.Value : 'Unnamed Instance';
+          // Extract security group names
+          const securityGroups = instance.SecurityGroups.map(
+            (sg) => sg.GroupName
+          ).join(', ');
 
-            ec2Data.push({
-              name: instanceName,
-              InstanceId: instance.InstanceId,
-              publicIp: instance.PublicIpAddress || 'None',
-              privateIp: instance.PrivateIpAddress,
-              isPublic: !!instance.PublicIpAddress,
-            });
-          }
+          const nameTag = instance.Tags.find((tag) => tag.Key === 'Name');
+          const instanceName = nameTag ? nameTag.Value : 'Unnamed Instance';
+
+          ec2Data.push({
+            name: instanceName,
+            InstanceId: instance.InstanceId,
+            publicIp: instance.PublicIpAddress || 'None',
+            privateIp: instance.PrivateIpAddress,
+            isPublic: !!instance.PublicIpAddress,
+            securityGroups: securityGroups,
+          });
         });
       });
 
